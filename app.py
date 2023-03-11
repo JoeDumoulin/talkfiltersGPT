@@ -47,8 +47,8 @@ def update_output(n_clicks, value):
         stop=["\n"]
       )
 
-      #return u' {}'.format(lex.checkReplace(response["choices"][0]["text"]))
-      return u' {}'.format(json.dumps(response))
+      return u' {}'.format(lex.checkReplace(response["choices"][0]["text"]))
+      #return u' {}'.format(json.dumps(response))
 
 
 if __name__ == "__main__":
