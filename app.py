@@ -20,14 +20,18 @@ app.layout = html.Div(
         html.I("Ask a question"),
         html.Br(),
         dcc.Input(id="query", type="text", placeholder="", style={'marginRight':'10px'}),
+        html.Br(),
         html.Button("ok", id="ok", n_clicks=0),
         html.Div(id="answer"),
+        html.Pre(id="jsonResponse")
     ]
 )
 
 
+
 @app.callback(
     Output("answer", "children"),
+    Output("jsonResponse", "children"),
     Input("ok", "n_clicks"),
     State(component_id="query", component_property="value"),
 )
@@ -47,8 +51,8 @@ def update_output(n_clicks, value):
         stop=["\n"]
       )
 
-      return u' {}'.format(lex.checkReplace(response["choices"][0]["text"]))
-      #return u' {}'.format(json.dumps(response))
+      return (u' {}'.format(lex.checkReplace(response["choices"][0]["text"])),
+                json.dumps(response, indent=2))
 
 
 if __name__ == "__main__":
