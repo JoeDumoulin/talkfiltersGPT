@@ -1,14 +1,8 @@
 # valspeaklex.py - regex transformations for valspeak
-
 import re
-import random
 
-#keys
-pattern = "pattern"
-replaceWith = "replaceWith"
+import lex
 
-def make_regex(instr):
-    return r"\b" + re.escape(instr) + r"\b"
 
 is_lst = [" like, ya know,", 
           " like wow!", 
@@ -34,14 +28,6 @@ bang_lst = ["!  Gag me with a SPOOOOON!",
             "!  Oh, wow!",
         ]
 
-def pick(lst, instr):
-    return lst[random.randrange(len(lst))]
-    
-# add a pattern to the lexer
-def add(lexer, patternVal, replaceWithVal):
-    lexer.append({pattern:re.compile(patternVal), 
-        replaceWith:replaceWithVal})
-
 lex_values = [
     (r"\b[Bb]ad\b", 'mean'),
     (r"\b[Bb]ig\b", "bitchin\'est"),
@@ -58,13 +44,13 @@ lex_values = [
     (r"\b[Gg]uy\b", "dude"),
     (r"\bher\b", "that chick"),
     (r"\bhim\b", "that dude"),
-    (r"\bis\b", lambda x: pick(is_lst, x.group())),
+    (r"\bis\b", lambda x: lex.pick(is_lst, x.group())),
     (r"\b[Hh]ouse\b", "pad"),
     (r"\b[Ii]nteresting\b", "cool"),
     (r"\b[Ll]arge\b", "awesum"),
     (r"\b[Ll]eave\b", "blow"),
     (r"\b[Mm]an\b", "nerd"),
-    (r"\b[Mm]aybe\b", lambda x: pick(maybe_lst, x.group())),
+    (r"\b[Mm]aybe\b", lambda x: lex.pick(maybe_lst, x.group())),
     (r"\b[Mm]eeting\b", "party"),
     (r"\b[Mm]ovie\b", "flick"),
     (r"\b[Mm]usic\b", "tunes"),
@@ -89,26 +75,12 @@ lex_values = [
     (r"\b[Tt]here\b", "Like, there"),
     (r"\b[Ww]e\b", "Us guys"),
     (r"\bYes,\b", "Like,"),
-    (r",", lambda x: pick(comma_lst, x.group())),
-    (r"!", lambda x: pick(bang_lst, x.group())),
+    (r",", lambda x: lex.pick(comma_lst, x.group())),
+    (r"!", lambda x: lex.pick(bang_lst, x.group())),
 ]
 
 lex_patterns = []
 
 for item in lex_values:
-    add(lex_patterns, item[0], item[1])
-
-
-# checkReplace - check the input string,
-#  for each pattern, 
-#    check the text for each pattern
-#    replace the pattern with the replaceWith
-#    
-def checkReplace(instr):
-    outstr = instr
-    for pat in lex_patterns:
-        outstr = pat[pattern].sub(pat[replaceWith], outstr)
-        #print(outstr)
-    return outstr
-
+    lex.add(lex_patterns, item[0], item[1])
 

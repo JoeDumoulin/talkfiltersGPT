@@ -5,9 +5,15 @@ import os
 
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output, State
-import valspeaklex as lex
 import openai
 import json
+
+import lex
+import valspeaklex
+import piratelex
+
+valspeak = valspeaklex.lex_patterns
+piratespeak = piratelex.lex_patterns
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -51,7 +57,7 @@ def update_output(n_clicks, value):
         stop=["\n"]
       )
 
-      return (u' {}'.format(lex.checkReplace(response["choices"][0]["text"])),
+      return (u' {}'.format(lex.checkReplace(piratespeak, response["choices"][0]["text"])),
                 json.dumps(response, indent=2))
 
 
